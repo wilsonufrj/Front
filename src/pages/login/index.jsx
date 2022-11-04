@@ -24,11 +24,11 @@ const LoginPage = (props) => {
     const [position, setPosition] = useState('center');
 
     useEffect(() => {
-        if (props.loginState.authenticated === true) {
+        if (props.loginState.authenticated === true && props.loginState.username != null) {
             navigate("/home")
         }
 
-    }, [props])
+    }, [props.loginState])
 
     const onHide = (name) => {
         setDisplayResponsive(false);
@@ -92,10 +92,6 @@ const LoginPage = (props) => {
                                             <label htmlFor="password">Password</label>
                                         </span>
                                     </div>
-
-
-
-
 
                                     <Button type="submit" label="Salvar" className="mt-2" />
                                 </form>

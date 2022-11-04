@@ -1,5 +1,5 @@
 const inicial_state = {
-    username: "",
+    username: null,
     loading: false,
     authenticated:false
 }
@@ -14,8 +14,8 @@ const loginReducer = (state = inicial_state, action) => {
             
         case ('SUCCESS'):
             return {
-                ...state,
-                authenticated: action.data,
+                username:action.data.username,
+                authenticated: true,
                 loading: false
             }
 
@@ -24,6 +24,9 @@ const loginReducer = (state = inicial_state, action) => {
                 ...state,
                 loading: false
             }
+        case ('LOGOUT'):
+            return inicial_state
+
         default:
             return state
     }
