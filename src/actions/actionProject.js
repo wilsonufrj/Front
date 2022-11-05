@@ -12,9 +12,9 @@ const projectCreated = (data) => {
     }
 }
 
-const successGetProject = (data)=>{
-    return{
-        type:'SUCCESS-PROJECT',
+const successGetProject = (data) => {
+    return {
+        type: 'SUCCESS-PROJECT',
         data
     }
 }
@@ -50,13 +50,20 @@ export const createProject = (username, data) => {
     }
 }
 
+export const deleteProject = (id, username) => {
+    return dispatch => {
+        api.delete(`/projects/${id}`, {
+            headers: {
+                "username": username
+            }
+        })//Ver o problema do deletar e observar o dispactch
+            .then((response) => {
+                if (response.status === 200) {
+                    let container = document.getElementById("content")
 
-export const getInfoProject = (id)=>{
-    return dispatch =>{
-        dispatch(load)
-        api.get(`/projects/${id}`)
-        .then(response=>{
-            console.log(response.data)
-        })
-    }   
+                    container.removeChild(document.getElementById(id));
+                }
+            })
+
+    }
 }

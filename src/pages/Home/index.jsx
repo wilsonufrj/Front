@@ -1,5 +1,7 @@
 import { Button, Card, Calendar, InputText, Menubar, classNames, Fieldset } from 'primereact'
 import { Dialog } from 'primereact/dialog';
+import { ProgressSpinner } from 'primereact/progressspinner';
+
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputMask } from 'primereact/inputmask';
@@ -9,7 +11,7 @@ import { useForm, Controller } from 'react-hook-form';
 import api from '../../services/api';
 import { useEffect } from 'react';
 import { logout } from '../../actions/actionLogin.js';
-import { getProjects, createProject, getInfoProject } from '../../actions/actionProject';
+import { getProjects, createProject, deleteProject } from '../../actions/actionProject';
 import { connect } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import InfoProject from '../../components/InfoProject';
@@ -33,7 +35,7 @@ const Home = (props) => {
   useEffect(() => {
     if (props.loginState.username === null && props.loginState.authenticated === false) {
       navigate("/")
-    }else{
+    } else {
       props.getProjects(props.loginState.username)
     }
   }, [props.loginState])
@@ -171,12 +173,12 @@ const Home = (props) => {
           </div>
         </Dialog>
 
-        <div className='grid'>
-          {props.projectState.loading === true ? <p>Loading...</p>
+        <div className='grid' id="content">
+          {props.projectState.loading === true ? <ProgressSpinner />
             : props.projectState.listProject.map((value, index) => {
               return (
-                <div className='col-12 md:col6 lg:col-3' key={index}>
-                  <InfoProject data={value}/>
+                <div id={`${value.id}`} className='col-12 md:col6 lg:col-3' key={index}>
+                  <InfoProject data={value} username={props.loginState.username} event={deleteProject()} />
                 </div>)
             })
           }
@@ -197,7 +199,7 @@ const mapDispacthToProps = {
   logout,
   getProjects,
   createProject,
-  getInfoProject
+  deleteProject
 }
 
 export default connect(mapStateProps, mapDispacthToProps)(Home)
