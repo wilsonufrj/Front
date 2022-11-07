@@ -56,7 +56,7 @@ export const deleteProject = (id, username) => {
             headers: {
                 "username": username
             }
-        })//Ver o problema do deletar e observar o dispactch
+        })
             .then((response) => {
                 if (response.status === 200) {
                     let container = document.getElementById("content")

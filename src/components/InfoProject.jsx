@@ -37,7 +37,6 @@ const InfoProject = ({ data, username,deleteProject}) => {
     setLoading(true)
     await api.get(`/projects/${id}`)
       .then(response => {
-        console.log(response.data)
         setInfo({...response.data})
         setLoading(false)
       })
@@ -60,6 +59,19 @@ const InfoProject = ({ data, username,deleteProject}) => {
     if (position) {
       setPosition(position);
     }
+  }
+
+  const completeProject = (id,username)=>{
+    api.patch(`/projects/${id}/done`,{...info,done:true},{
+      headers:{
+        "username":username
+      }
+    })
+    .then((response)=>{
+      if(response.status == 200){
+        setInfo({...info,done:response.data})
+      }
+    })
   }
 
   return (
@@ -122,9 +134,16 @@ const InfoProject = ({ data, username,deleteProject}) => {
             <p className="mt-0 mb-0 text-500"><span className="font-bold text-900">Deadline:</span> {formatDate(info.deadline)}</p>
           </div>
           <div className="mt-2 mb-0 line-height-3">
-            <Button onClick={() => console.log("Marcar projeto como feito")} className='p-button-success' label="Done" icon="pi pi-check" style={{ marginRight: '.25em' }} />
+            {info.done?<div className="grid bt-2 ">
+              <div className="mb-0 bg-green-500 border-round mr-2 col-10 ">
+                <span className="font-bold text-900">Project Complete </span>
+              </div>
+              <Button onClick={() => deleteProject(info.id,username)} className='p-button-danger col-1' icon="pi pi-trash" style={{ marginRight: '.25em' }} />
+            </div>:<>
+            <Button onClick={() => completeProject(info.id,username)} className='p-button-success' label="Done" icon="pi pi-check" style={{ marginRight: '.25em' }} />
             <Button onClick={() => onClick()} className='p-button-info' icon="pi pi-pencil" style={{ marginRight: '.25em' }} />
             <Button onClick={() => deleteProject(info.id,username)} className='p-button-danger' icon="pi pi-trash" style={{ marginRight: '.25em' }} />
+            </>}
           </div>
         </div>
         }
